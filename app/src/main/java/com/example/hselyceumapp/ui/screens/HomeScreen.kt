@@ -64,7 +64,14 @@ fun HomeScreen(
     navController: NavController,
     viewModel: UsersViewModel = koinViewModel()
 ) {
+    val users by viewModel.users.collectAsState()
     var clicked by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(clicked) {
+        if (clicked) {
+            viewModel.fetchUsers()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -73,34 +80,21 @@ fun HomeScreen(
             .padding(top = 10.dp)
             .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top))
     ) {
-        Button(
-            onClick = {
-                clicked = true
-            }
-        ) {
+        Button(onClick = { clicked = true }) {
             Text(stringResource(R.string.get_user))
         }
 
-        if (clicked) {
-            val users by viewModel.users.collectAsState()
-
-            LaunchedEffect(Unit) { viewModel.fetchUsers() }
-
-            LazyColumn(
-                modifier = Modifier
-            ) {
-                items(users) { user ->
-                    UserCard(
-                        user = user
-                    ) {
-                        viewModel.selectUser(user)
-                        navController.navigate("user_screen")
-                    }
+        LazyColumn {
+            items(users) { user ->
+                UserCard(user = user) {
+                    viewModel.selectUser(user)
+                    navController.navigate("user_screen")
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun UserCard(

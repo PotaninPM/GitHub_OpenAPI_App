@@ -5,24 +5,19 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.hselyceumapp.R
-import com.mikepm.metoo.ui.navigation.AppNavBar
-import com.mikepm.metoo.ui.navigation.AppNavHost
-import com.mikepm.metoo.ui.navigation.BottomNavItem
-import com.mikepm.metoo.ui.navigation.Screen
+import com.example.hselyceumapp.ui.navigation.AppNavBar
+import com.example.hselyceumapp.ui.navigation.AppNavHost
+import com.example.hselyceumapp.ui.navigation.BottomNavItem
+import com.example.hselyceumapp.ui.navigation.Screen
 
 @Composable
 fun MainScreen() {
@@ -33,6 +28,7 @@ fun MainScreen() {
             selectedIcon = Icons.Filled.Menu,
             unselectedIcon = Icons.Outlined.Menu
         )
+
 //        BottomNavItem(
 //            route = Screen..route,
 //            labelRes = R.string.event_invitations,

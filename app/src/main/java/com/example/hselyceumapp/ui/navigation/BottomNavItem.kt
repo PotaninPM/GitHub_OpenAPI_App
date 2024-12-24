@@ -1,4 +1,4 @@
-package com.mikepm.metoo.ui.navigation
+package com.example.hselyceumapp.ui.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector

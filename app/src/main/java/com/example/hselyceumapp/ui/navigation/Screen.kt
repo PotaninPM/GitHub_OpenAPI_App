@@ -1,4 +1,4 @@
-package com.mikepm.metoo.ui.navigation
+package com.example.hselyceumapp.ui.navigation
 
 sealed class Screen(val route: String) {
     data object MainScreen : Screen("main_screen")

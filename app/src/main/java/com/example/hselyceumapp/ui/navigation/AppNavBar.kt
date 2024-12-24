@@ -1,4 +1,4 @@
-package com.mikepm.metoo.ui.navigation
+package com.example.hselyceumapp.ui.navigation
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
