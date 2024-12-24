@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">HSE Lyceum App</string>
+    <string name="main">Главная</string>
+    <string name="open">Открыть</string>
+    <string name="github_profile">Профиль GitHub</string>
+    <string name="get_user">Получить пользователей</string>
+</resources>
