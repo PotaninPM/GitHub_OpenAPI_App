@@ -5,11 +5,15 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.example.hselyceumapp.domain.model.User
 import com.example.hselyceumapp.ui.screens.HomeScreen
 import com.example.hselyceumapp.ui.screens.MainScreen
 import com.example.hselyceumapp.ui.screens.UserScreen
+import com.google.gson.Gson
 
 @Composable
 fun AppNavHost(
@@ -31,7 +35,7 @@ fun AppNavHost(
             HomeScreen(navController)
         }
 
-        composable(Screen.UserScreen.route) {
+        composable("user_screen") {
             UserScreen()
         }
     }

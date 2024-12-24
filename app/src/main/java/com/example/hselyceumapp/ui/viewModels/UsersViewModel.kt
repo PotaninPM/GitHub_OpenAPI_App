@@ -1,4 +1,4 @@
-package com.example.hselyceumapp.ui.viewmodel
+package com.example.hselyceumapp.ui.viewModels
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -18,7 +18,7 @@ class UsersViewModel(
     val users: StateFlow<List<User>> = _users
 
     private val _selectedUser = MutableStateFlow<User?>(null)
-    val selectedUser: StateFlow<User?> = _selectedUser
+    val selectedUser: StateFlow<User?> get() = _selectedUser
 
     fun fetchUsers() {
         viewModelScope.launch {

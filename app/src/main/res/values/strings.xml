@@ -4,4 +4,7 @@
     <string name="open">Открыть</string>
     <string name="github_profile">Профиль GitHub</string>
     <string name="get_user">Получить пользователей</string>
+    <string name="id">ID</string>
+    <string name="login">Логин</string>
+    <string name="github">GitHub</string>
 </resources>

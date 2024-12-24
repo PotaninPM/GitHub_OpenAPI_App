@@ -32,6 +32,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,7 +55,8 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.hselyceumapp.R
 import com.example.hselyceumapp.domain.model.User
-import com.example.hselyceumapp.ui.viewmodel.UsersViewModel
+import com.example.hselyceumapp.ui.viewModels.UsersViewModel
+import com.google.gson.Gson
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -73,7 +75,7 @@ fun HomeScreen(
     ) {
         Button(
             onClick = {
-                clicked = !clicked
+                clicked = true
             }
         ) {
             Text(stringResource(R.string.get_user))
@@ -91,7 +93,6 @@ fun HomeScreen(
                     UserCard(
                         user = user
                     ) {
-                        Log.i("INFOG", user.toString())
                         viewModel.selectUser(user)
                         navController.navigate("user_screen")
                     }
@@ -172,7 +173,7 @@ fun UserCard(
                 text = stringResource(R.string.github_profile),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                color = Color(0xFF3B5998),
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {
                     openGitHub(context, user.htmlUrl)
                 }
