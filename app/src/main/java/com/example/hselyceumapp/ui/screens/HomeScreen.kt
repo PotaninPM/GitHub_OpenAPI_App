@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
@@ -55,14 +56,15 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.hselyceumapp.R
 import com.example.hselyceumapp.domain.model.User
+import com.example.hselyceumapp.ui.viewModels.FavoriteUsersViewModel
 import com.example.hselyceumapp.ui.viewModels.UsersViewModel
-import com.google.gson.Gson
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: UsersViewModel = koinViewModel()
+    viewModel: UsersViewModel = koinViewModel(),
+    viewModelFav: FavoriteUsersViewModel = koinViewModel()
 ) {
     val users by viewModel.users.collectAsState()
     var clicked by rememberSaveable { mutableStateOf(false) }
@@ -84,13 +86,33 @@ fun HomeScreen(
             Text(stringResource(R.string.get_user))
         }
 
-        LazyColumn {
-            items(users) { user ->
-                UserCard(user = user) {
-                    viewModel.selectUser(user)
-                    navController.navigate("user_screen")
-                }
+        UserList(
+            users = users,
+            onFavoriteToggle = { user -> viewModelFav.toggleFavorite(user) },
+            onClick = { user ->
+                viewModel.selectUser(user)
+                navController.navigate("user_screen")
             }
+        )
+    }
+}
+
+@Composable
+fun UserList(
+    users: List<User>,
+    onFavoriteToggle: (User) -> Unit,
+    onClick: (User) -> Unit
+) {
+    LazyColumn {
+        items(users) { user ->
+            UserCard(
+                user = user,
+                isFavorite = user.is_favorite,
+                onFavoriteToggle = { onFavoriteToggle(user) },
+                onClick = {
+                    onClick(user)
+                }
+            )
         }
     }
 }
@@ -99,7 +121,9 @@ fun HomeScreen(
 @Composable
 fun UserCard(
     user: User,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isFavorite: Int,
+    onFavoriteToggle: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -143,10 +167,15 @@ fun UserCard(
 
                 IconButton(
                     onClick = {
-
+                        Log.d("INFOG", "Favorite toggle clicked for user: ${user.login} ${user.is_favorite}")
+                        onFavoriteToggle()
                     }
                 ) {
-                    Icon(Icons.Default.FavoriteBorder, contentDescription = "Favorite")
+                    Icon(
+                        imageVector = if (isFavorite == 1) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = "Toggle Favorite",
+                        tint = if (isFavorite == 1) Color.Red else Color.Gray
+                    )
                 }
             }
 

@@ -15,12 +15,16 @@ fun UserDto.toDomain() = User(
     id = id,
     login = login,
     avatarUrl = avatarUrl,
-    htmlUrl = htmlUrl
+    htmlUrl = htmlUrl,
+    is_favorite = 0
 )
 
-fun UserEntity.toUser() = User(
-    id = id,
-    login = login,
-    avatarUrl = avatarUrl,
-    htmlUrl = htmlUrl
-)
+fun UserEntity.toUser(): User {
+    return User(
+        id = this.id,
+        login = this.login,
+        avatarUrl = this.avatarUrl,
+        htmlUrl = this.htmlUrl,
+        is_favorite = this.isFavorite
+    )
+}

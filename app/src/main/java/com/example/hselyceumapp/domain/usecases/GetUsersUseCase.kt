@@ -6,6 +6,7 @@ import com.example.hselyceumapp.data.mappers.toEntity
 import com.example.hselyceumapp.data.mappers.toUser
 import com.example.hselyceumapp.data.network.api.UserApi
 import com.example.hselyceumapp.domain.model.User
+import kotlinx.coroutines.flow.map
 
 class GetUsersUseCase(
     private val userApi: UserApi,
