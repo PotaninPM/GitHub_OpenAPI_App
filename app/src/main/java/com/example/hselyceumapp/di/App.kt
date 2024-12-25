@@ -58,8 +58,8 @@ val appModule = module {
 
     single<UserRepository> { UserRepositoryImpl(get()) }
 
-    single { GetUsersUseCase(get()) }
+    single { GetUsersUseCase(get(), get()) }
     single { AddUserUseCase(get()) }
 
-    viewModel { UsersViewModel(get(), get()) }
+    single { UsersViewModel(get(), get()) }
 }

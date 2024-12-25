@@ -46,7 +46,6 @@ import org.koin.androidx.compose.koinViewModel
 fun UserScreen(
     viewModel: UsersViewModel = koinViewModel()
 ) {
-
     val selectedUser by viewModel.selectedUser.collectAsState()
 
     selectedUser?.let { user ->

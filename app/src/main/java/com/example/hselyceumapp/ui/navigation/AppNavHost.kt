@@ -31,7 +31,7 @@ fun AppNavHost(
             HomeScreen(navController)
         }
 
-        composable("user_screen") {
+        composable(Screen.UserScreen.route) {
             UserScreen()
         }
     }
