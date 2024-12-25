@@ -7,9 +7,13 @@ import com.example.hselyceumapp.data.local.AppDatabase
 import com.example.hselyceumapp.data.network.api.UserApi
 import com.example.hselyceumapp.data.repository.UserRepositoryImpl
 import com.example.hselyceumapp.domain.repository.UserRepository
+import com.example.hselyceumapp.domain.usecases.AddToFavoritesUseCase
 import com.example.hselyceumapp.domain.usecases.AddUserUseCase
+import com.example.hselyceumapp.domain.usecases.GetFavoritesUseCase
 import com.example.hselyceumapp.domain.usecases.GetUsersUseCase
+import com.example.hselyceumapp.domain.usecases.RemoveFromFavoritesUseCase
 import com.example.hselyceumapp.ui.screens.MainScreen
+import com.example.hselyceumapp.ui.viewModels.FavoritesViewModel
 import com.example.hselyceumapp.ui.viewModels.UsersViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.compose.KoinContext
@@ -62,4 +66,16 @@ val appModule = module {
     single { AddUserUseCase(get()) }
 
     single { UsersViewModel(get(), get()) }
+
+    single { GetFavoritesUseCase(get()) }
+    single { AddToFavoritesUseCase(get()) }
+    single { RemoveFromFavoritesUseCase(get()) }
+
+    single {
+        FavoritesViewModel(
+            getFavoritesUseCase = get(),
+            addToFavoritesUseCase = get(),
+            removeFromFavoritesUseCase = get()
+        )
+    }
 }

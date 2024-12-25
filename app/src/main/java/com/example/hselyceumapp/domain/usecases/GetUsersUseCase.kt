@@ -1,6 +1,6 @@
 package com.example.hselyceumapp.domain.usecases
 
-import com.example.hselyceumapp.data.local.UserDao
+import com.example.hselyceumapp.data.local.dao.UserDao
 import com.example.hselyceumapp.data.mappers.toDomain
 import com.example.hselyceumapp.data.mappers.toEntity
 import com.example.hselyceumapp.data.mappers.toUser

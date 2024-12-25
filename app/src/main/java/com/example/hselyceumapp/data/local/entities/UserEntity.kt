@@ -1,4 +1,4 @@
-package com.example.hselyceumapp.data.local
+package com.example.hselyceumapp.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

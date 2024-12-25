@@ -5,11 +5,16 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -27,14 +32,13 @@ fun MainScreen() {
             labelRes = R.string.main,
             selectedIcon = Icons.Filled.Menu,
             unselectedIcon = Icons.Outlined.Menu
+        ),
+        BottomNavItem(
+            route = Screen.FavScreen.route,
+            labelRes = R.string.favourite,
+            selectedIcon = Icons.Filled.Favorite,
+            unselectedIcon = Icons.Outlined.FavoriteBorder
         )
-
-//        BottomNavItem(
-//            route = Screen..route,
-//            labelRes = R.string.event_invitations,
-//            selectedIcon = Icons.Filled.AddCircle,
-//            unselectedIcon = Icons.Outlined.Add
-//        ),
 //        BottomNavItem(
 //            route = Screen.Profile.route,
 //            labelRes = R.string.profile,

@@ -1,8 +1,6 @@
 package com.example.hselyceumapp.data.repository
 
-import com.example.hselyceumapp.data.local.UserDao
 import com.example.hselyceumapp.data.mappers.toDomain
-import com.example.hselyceumapp.data.mappers.toEntity
 import com.example.hselyceumapp.data.network.api.UserApi
 import com.example.hselyceumapp.domain.model.User
 import com.example.hselyceumapp.domain.repository.UserRepository

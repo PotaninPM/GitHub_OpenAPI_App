@@ -1,6 +1,6 @@
 package com.example.hselyceumapp.data.mappers
 
-import com.example.hselyceumapp.data.local.UserEntity
+import com.example.hselyceumapp.data.local.entities.UserEntity
 import com.example.hselyceumapp.data.network.dto.UserDto
 import com.example.hselyceumapp.domain.model.User
 

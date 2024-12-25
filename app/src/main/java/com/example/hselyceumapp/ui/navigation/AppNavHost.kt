@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.hselyceumapp.ui.screens.FavScreen
 import com.example.hselyceumapp.ui.screens.HomeScreen
 import com.example.hselyceumapp.ui.screens.MainScreen
 import com.example.hselyceumapp.ui.screens.UserScreen
@@ -33,6 +34,10 @@ fun AppNavHost(
 
         composable(Screen.UserScreen.route) {
             UserScreen()
+        }
+
+        composable(Screen.FavScreen.route) {
+            FavScreen()
         }
     }
 }

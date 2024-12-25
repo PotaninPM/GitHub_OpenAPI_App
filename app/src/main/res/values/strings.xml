@@ -7,4 +7,5 @@
     <string name="id">ID</string>
     <string name="login">Логин</string>
     <string name="github">GitHub</string>
+    <string name="favourite">Избранные</string>
 </resources>
