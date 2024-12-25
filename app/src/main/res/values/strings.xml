@@ -8,4 +8,9 @@
     <string name="login">Логин</string>
     <string name="github">GitHub</string>
     <string name="favourite">Избранные</string>
+    <string name="none_chosen">Никто не был выбран</string>
+    <string name="profile_picture">Картинка профиля</string>
+    <string name="toggle_favorites">Добавить в избранное</string>
+    <string name="user_avatar">Аватар юзера</string>
+    <string name="user_id">ID пользователя</string>
 </resources>

@@ -1,12 +1,11 @@
 package com.example.hselyceumapp.domain.usecases
 
-import com.example.hselyceumapp.data.local.dao.UserDao
+import com.example.hselyceumapp.data.room.dao.UserDao
 import com.example.hselyceumapp.data.mappers.toDomain
 import com.example.hselyceumapp.data.mappers.toEntity
 import com.example.hselyceumapp.data.mappers.toUser
 import com.example.hselyceumapp.data.network.api.UserApi
 import com.example.hselyceumapp.domain.model.User
-import kotlinx.coroutines.flow.map
 
 class GetUsersUseCase(
     private val userApi: UserApi,

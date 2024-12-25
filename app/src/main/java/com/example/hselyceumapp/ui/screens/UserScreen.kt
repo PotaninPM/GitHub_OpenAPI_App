@@ -1,12 +1,9 @@
 package com.example.hselyceumapp.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -23,7 +20,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,12 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.example.hselyceumapp.R
-import com.example.hselyceumapp.domain.model.User
 import com.example.hselyceumapp.ui.viewModels.UsersViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -69,7 +61,7 @@ fun UserScreen(
             ) {
                 Image(
                     painter = rememberAsyncImagePainter(user.avatarUrl),
-                    contentDescription = "Profile Picture",
+                    contentDescription = stringResource(R.string.profile_picture),
                     modifier = Modifier
                         .size(110.dp)
                         .clip(CircleShape)
@@ -114,7 +106,7 @@ fun UserScreen(
         }
     } ?: run {
         Text(
-            text = "No user selected",
+            text = stringResource(R.string.none_chosen),
             modifier = Modifier.padding(16.dp)
         )
     }

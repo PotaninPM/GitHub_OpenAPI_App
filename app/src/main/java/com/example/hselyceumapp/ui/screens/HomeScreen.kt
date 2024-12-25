@@ -55,7 +55,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.hselyceumapp.R
+import com.example.hselyceumapp.data.room.entities.FavoriteUserEntity
 import com.example.hselyceumapp.domain.model.User
+import com.example.hselyceumapp.ui.navigation.Screen
 import com.example.hselyceumapp.ui.viewModels.FavoriteUsersViewModel
 import com.example.hselyceumapp.ui.viewModels.UsersViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -67,9 +69,12 @@ fun HomeScreen(
     viewModelFav: FavoriteUsersViewModel = koinViewModel()
 ) {
     val users by viewModel.users.collectAsState()
+    val favoriteUsers by viewModelFav.favoriteUsers.collectAsState()
+
     var clicked by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(clicked) {
+        viewModelFav.fetchFavoriteUsers()
         if (clicked) {
             viewModel.fetchUsers()
         }
@@ -88,10 +93,11 @@ fun HomeScreen(
 
         UserList(
             users = users,
+            favoriteUsers = favoriteUsers,
             onFavoriteToggle = { user -> viewModelFav.toggleFavorite(user) },
             onClick = { user ->
                 viewModel.selectUser(user)
-                navController.navigate("user_screen")
+                navController.navigate(Screen.UserScreen.route)
             }
         )
     }
@@ -100,18 +106,18 @@ fun HomeScreen(
 @Composable
 fun UserList(
     users: List<User>,
+    favoriteUsers: List<FavoriteUserEntity>,
     onFavoriteToggle: (User) -> Unit,
     onClick: (User) -> Unit
 ) {
     LazyColumn {
         items(users) { user ->
+            val isFavorite = favoriteUsers.any { it.id == user.id }
             UserCard(
                 user = user,
-                isFavorite = user.is_favorite,
+                isFavorite = isFavorite,
                 onFavoriteToggle = { onFavoriteToggle(user) },
-                onClick = {
-                    onClick(user)
-                }
+                onClick = { onClick(user) }
             )
         }
     }
@@ -122,7 +128,7 @@ fun UserList(
 fun UserCard(
     user: User,
     onClick: () -> Unit,
-    isFavorite: Int,
+    isFavorite: Boolean,
     onFavoriteToggle: () -> Unit
 ) {
     val context = LocalContext.current
@@ -167,14 +173,21 @@ fun UserCard(
 
                 IconButton(
                     onClick = {
-                        Log.d("INFOG", "Favorite toggle clicked for user: ${user.login} ${user.is_favorite}")
                         onFavoriteToggle()
                     }
                 ) {
                     Icon(
-                        imageVector = if (isFavorite == 1) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = "Toggle Favorite",
-                        tint = if (isFavorite == 1) Color.Red else Color.Gray
+                        imageVector = if (isFavorite) {
+                            Icons.Default.Favorite
+                        } else {
+                            Icons.Default.FavoriteBorder
+                        },
+                        contentDescription = stringResource(R.string.toggle_favorites),
+                        tint = if (isFavorite) {
+                            Color.Red
+                        } else {
+                            Color.Gray
+                        }
                     )
                 }
             }
@@ -183,7 +196,7 @@ fun UserCard(
 
             Image(
                 painter = rememberAsyncImagePainter(user.avatarUrl),
-                contentDescription = "User Avatar",
+                contentDescription = stringResource(R.string.user_avatar),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
@@ -205,7 +218,7 @@ fun UserCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Outlined.Person, contentDescription = "User ID", tint = Color(0xFF3B5998))
+                Icon(Icons.Outlined.Person, contentDescription = stringResource(R.string.user_id), tint = Color(0xFF3B5998))
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "ID: ${user.id}", color = Color.Gray, fontSize = 14.sp)
             }

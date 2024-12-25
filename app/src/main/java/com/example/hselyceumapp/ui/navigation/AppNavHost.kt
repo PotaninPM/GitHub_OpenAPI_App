@@ -37,7 +37,7 @@ fun AppNavHost(
         }
 
         composable(Screen.FavScreen.route) {
-            FavScreen()
+            FavScreen(navController)
         }
     }
 }

@@ -3,9 +3,10 @@ package com.example.hselyceumapp.di
 import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.room.Room
-import com.example.hselyceumapp.data.local.AppDatabase
+import com.example.hselyceumapp.data.room.AppDatabase
 import com.example.hselyceumapp.data.network.api.UserApi
 import com.example.hselyceumapp.data.repository.UserRepositoryImpl
+import com.example.hselyceumapp.data.room.migrations.MIGRATION_1_2
 import com.example.hselyceumapp.domain.repository.UserRepository
 import com.example.hselyceumapp.domain.usecases.AddUserUseCase
 import com.example.hselyceumapp.domain.usecases.GetUsersUseCase
@@ -15,7 +16,6 @@ import com.example.hselyceumapp.ui.viewModels.UsersViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.compose.KoinContext
 import org.koin.core.context.GlobalContext.startKoin
-import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -44,7 +44,7 @@ val appModule = module {
             androidContext(),
             AppDatabase::class.java,
             "users"
-        ).build()
+        ).addMigrations(MIGRATION_1_2).build()
     }
 
     single {
@@ -56,6 +56,7 @@ val appModule = module {
     }
 
     single { get<AppDatabase>().userDao() }
+    single { get<AppDatabase>().favoriteDao() }
 
     single<UserRepository> { UserRepositoryImpl(get()) }
 
@@ -65,8 +66,6 @@ val appModule = module {
     single { UsersViewModel(get(), get()) }
 
     single {
-        FavoriteUsersViewModel(
-            get()
-        )
+        FavoriteUsersViewModel(get())
     }
 }

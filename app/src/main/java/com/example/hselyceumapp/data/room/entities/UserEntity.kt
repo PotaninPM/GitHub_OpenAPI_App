@@ -1,4 +1,4 @@
-package com.example.hselyceumapp.data.local.entities
+package com.example.hselyceumapp.data.room.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
