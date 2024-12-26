@@ -16,7 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.hselyceumapp.data.mappers.toeUser
+import com.example.hselyceumapp.data.mappers.toUser
 import com.example.hselyceumapp.domain.model.User
 import com.example.hselyceumapp.ui.navigation.Screen
 import com.example.hselyceumapp.ui.viewModels.FavoriteUsersViewModel
@@ -49,9 +49,9 @@ fun FavScreen(
                     htmlUrl = user.htmlUrl
                 ),
                 isFavorite = true,
-                onFavoriteToggle = { viewModel.toggleFavorite(user.toeUser()) },
+                onFavoriteToggle = { viewModel.toggleFavorite(user.toUser()) },
                 onClick = {
-                    viewModelUser.selectUser(user.toeUser())
+                    viewModelUser.selectUser(user.toUser())
                     navController.navigate(Screen.UserScreen.route)
                 }
             )
