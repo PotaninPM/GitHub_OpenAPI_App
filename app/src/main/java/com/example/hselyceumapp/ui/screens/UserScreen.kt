@@ -3,8 +3,10 @@ package com.example.hselyceumapp.ui.screens
 import android.media.MediaPlayer
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -34,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -143,6 +146,24 @@ fun UserScreen(
                         .padding(16.dp)
                 ) {
                     Text(stringResource(R.string.new_year))
+                }
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Image(
+                        modifier = Modifier.size(110.dp),
+                        painter = painterResource(R.drawable.bauble),
+                        contentDescription = null
+                    )
+                    Image(
+                        modifier = Modifier.size(110.dp),
+                        painter = painterResource(R.drawable.christmas_tree),
+                        contentDescription = null
+                    )
                 }
             }
         }
