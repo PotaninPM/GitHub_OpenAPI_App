@@ -27,6 +27,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -42,7 +43,6 @@ android {
 }
 
 dependencies {
-
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -45,6 +46,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -57,6 +59,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.hselyceumapp.R
 import com.example.hselyceumapp.data.room.entities.FavoriteUserEntity
 import com.example.hselyceumapp.domain.model.User
+import com.example.hselyceumapp.ui.components.shimmerLoading
 import com.example.hselyceumapp.ui.navigation.Screen
 import com.example.hselyceumapp.ui.viewModels.FavoriteUsersViewModel
 import com.example.hselyceumapp.ui.viewModels.UsersViewModel
@@ -70,14 +73,11 @@ fun HomeScreen(
 ) {
     val users by viewModel.users.collectAsState()
     val favoriteUsers by viewModelFav.favoriteUsers.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
-    var clicked by rememberSaveable { mutableStateOf(false) }
-
-    LaunchedEffect(clicked) {
+    LaunchedEffect(Unit) {
         viewModelFav.fetchFavoriteUsers()
-        if (clicked) {
-            viewModel.fetchUsers()
-        }
+        viewModel.fetchUsers()
     }
 
     Column(
@@ -87,10 +87,6 @@ fun HomeScreen(
             .padding(top = 10.dp)
             .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top))
     ) {
-        Button(onClick = { clicked = true }) {
-            Text(stringResource(R.string.get_user))
-        }
-
         UserList(
             users = users,
             favoriteUsers = favoriteUsers,
@@ -98,7 +94,8 @@ fun HomeScreen(
             onClick = { user ->
                 viewModel.selectUser(user)
                 navController.navigate(Screen.UserScreen.route)
-            }
+            },
+            isLoading = isLoading
         )
     }
 }
@@ -108,7 +105,8 @@ fun UserList(
     users: List<User>,
     favoriteUsers: List<FavoriteUserEntity>,
     onFavoriteToggle: (User) -> Unit,
-    onClick: (User) -> Unit
+    onClick: (User) -> Unit,
+    isLoading: Boolean
 ) {
     LazyColumn {
         items(users) { user ->
@@ -117,7 +115,8 @@ fun UserList(
                 user = user,
                 isFavorite = isFavorite,
                 onFavoriteToggle = { onFavoriteToggle(user) },
-                onClick = { onClick(user) }
+                onClick = { onClick(user) },
+                isLoading = isLoading
             )
         }
     }
@@ -126,114 +125,148 @@ fun UserList(
 
 @Composable
 fun UserCard(
-    user: User,
+    user: User?,
     onClick: () -> Unit,
     isFavorite: Boolean,
-    onFavoriteToggle: () -> Unit
+    onFavoriteToggle: () -> Unit,
+    isLoading: Boolean
 ) {
     val context = LocalContext.current
 
     OutlinedCard(
         shape = RoundedCornerShape(20.dp),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 2.dp
-        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onClick() }
+            .clickable(enabled = !isLoading) { onClick() }
     ) {
-        Column(
-            modifier = Modifier
-                .padding(14.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(36.dp)
-                        .background(Color(0xFFD1E3FF), shape = RoundedCornerShape(18.dp))
-                ) {
-                    Text(
-                        text = user.login.first().toString(),
-                        modifier = Modifier.align(Alignment.Center),
-                        color = Color(0xFF3B5998),
-                        fontWeight = FontWeight.Bold
+        Column(modifier = Modifier.padding(14.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (isLoading) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .shimmerLoading()
                     )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .background(Color(0xFFD1E3FF), shape = RoundedCornerShape(18.dp))
+                    ) {
+                        Text(
+                            text = user?.login?.first()?.toString() ?: "",
+                            modifier = Modifier.align(Alignment.Center),
+                            color = Color(0xFF3B5998),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = user.login,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-                )
+
+                if (isLoading) {
+                    Box(
+                        modifier = Modifier
+                            .height(20.dp)
+                            .width(100.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .shimmerLoading()
+                    )
+                } else {
+                    Text(
+                        text = user?.login.orEmpty(),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                }
+
                 Spacer(modifier = Modifier.weight(1f))
 
-                IconButton(
-                    onClick = {
-                        onFavoriteToggle()
+                if (!isLoading) {
+                    IconButton(onClick = { onFavoriteToggle() }) {
+                        Icon(
+                            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = stringResource(R.string.toggle_favorites),
+                            tint = if (isFavorite) Color.Red else Color.Gray
+                        )
                     }
-                ) {
-                    Icon(
-                        imageVector = if (isFavorite) {
-                            Icons.Default.Favorite
-                        } else {
-                            Icons.Default.FavoriteBorder
-                        },
-                        contentDescription = stringResource(R.string.toggle_favorites),
-                        tint = if (isFavorite) {
-                            Color.Red
-                        } else {
-                            Color.Gray
-                        }
-                    )
                 }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Image(
-                painter = rememberAsyncImagePainter(user.avatarUrl),
-                contentDescription = stringResource(R.string.user_avatar),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
-                    .background(Color.Gray, shape = RoundedCornerShape(8.dp))
-            )
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .shimmerLoading()
+                )
+            } else {
+                Image(
+                    painter = rememberAsyncImagePainter(user?.avatarUrl),
+                    contentDescription = stringResource(R.string.user_avatar),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .background(color = Color.Gray, RoundedCornerShape(8.dp))
+                )
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Text(
-                text = stringResource(R.string.github_profile),
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable {
-                    openGitHub(context, user.htmlUrl)
-                }
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Outlined.Person, contentDescription = stringResource(R.string.user_id), tint = Color(0xFF3B5998))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "ID: ${user.id}", color = Color.Gray, fontSize = 14.sp)
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(20.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .shimmerLoading()
+                )
+            } else {
+                Text(
+                    text = stringResource(R.string.github_profile),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.clickable { openGitHub(context, user?.htmlUrl.orEmpty()) }
+                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Button(
-                    onClick = {
-                        onClick()
-                    }
-                ) {
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(20.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .shimmerLoading()
+                )
+            } else {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Outlined.Person, contentDescription = stringResource(R.string.user_id), tint = Color(0xFF3B5998))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = "ID: ${user?.id}", color = Color.Gray, fontSize = 14.sp)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .width(90.dp)
+                        .height(35.dp)
+                        .clip(CircleShape)
+                        .shimmerLoading()
+                )
+            } else {
+                Button(onClick = { onClick() }) {
                     Text(
                         text = stringResource(R.string.open),
                         textAlign = TextAlign.Center,
@@ -244,6 +277,7 @@ fun UserCard(
         }
     }
 }
+
 
 fun openGitHub(context: android.content.Context, link: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))

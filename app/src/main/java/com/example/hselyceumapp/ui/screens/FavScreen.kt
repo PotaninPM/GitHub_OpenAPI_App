@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.hselyceumapp.data.mappers.toUser
 import com.example.hselyceumapp.domain.model.User
+import com.example.hselyceumapp.ui.components.shimmerLoading
 import com.example.hselyceumapp.ui.navigation.Screen
 import com.example.hselyceumapp.ui.viewModels.FavoriteUsersViewModel
 import com.example.hselyceumapp.ui.viewModels.UsersViewModel
@@ -53,7 +54,8 @@ fun FavScreen(
                 onClick = {
                     viewModelUser.selectUser(user.toUser())
                     navController.navigate(Screen.UserScreen.route)
-                }
+                },
+                isLoading = false
             )
         }
     }
