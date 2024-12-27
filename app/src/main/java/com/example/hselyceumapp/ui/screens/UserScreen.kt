@@ -1,5 +1,6 @@
 package com.example.hselyceumapp.ui.screens
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -15,22 +16,30 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.hselyceumapp.R
+import com.example.hselyceumapp.ui.components.Snowfall
 import com.example.hselyceumapp.ui.viewModels.UsersViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -38,7 +47,16 @@ import org.koin.androidx.compose.koinViewModel
 fun UserScreen(
     viewModel: UsersViewModel = koinViewModel()
 ) {
+    val context = LocalContext.current
+
     val selectedUser by viewModel.selectedUser.collectAsState()
+    var isPlaying by rememberSaveable { mutableStateOf(false) }
+    var mediaPlayer: MediaPlayer? = null
+    var isSnowfallActive by remember { mutableStateOf(false) }
+
+    val musicFiles = listOf(R.raw.song1, R.raw.songs2)
+
+    Snowfall(isSnowfallActive)
 
     selectedUser?.let { user ->
         Column(
@@ -103,6 +121,30 @@ fun UserScreen(
                     },
                 )
             }
+
+            if (!isPlaying) {
+                Button(
+                    onClick = {
+                        if (mediaPlayer == null) {
+                            mediaPlayer = MediaPlayer.create(context, musicFiles.random())
+                            mediaPlayer?.start()
+                            isSnowfallActive = true
+
+                            mediaPlayer?.setOnCompletionListener {
+                                mediaPlayer?.release()
+                                mediaPlayer = MediaPlayer.create(context, musicFiles.random())
+                                mediaPlayer?.start()
+                            }
+                        }
+                        isPlaying = true
+                    },
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(16.dp)
+                ) {
+                    Text(stringResource(R.string.new_year))
+                }
+            }
         }
     } ?: run {
         Text(
@@ -110,7 +152,14 @@ fun UserScreen(
             modifier = Modifier.padding(16.dp)
         )
     }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            mediaPlayer?.release()
+        }
+    }
 }
+
 
 @Composable
 fun UserInfoCard(

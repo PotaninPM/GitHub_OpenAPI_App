@@ -13,4 +13,5 @@
     <string name="toggle_favorites">Добавить в избранное</string>
     <string name="user_avatar">Аватар юзера</string>
     <string name="user_id">ID пользователя</string>
+    <string name="new_year">С НОВЫМ ГОДОМ!</string>
 </resources>

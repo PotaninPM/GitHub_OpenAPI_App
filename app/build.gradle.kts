@@ -43,6 +43,8 @@ android {
 }
 
 dependencies {
+    // lotti
+    implementation(libs.lottie)
 
     // Retrofit
     implementation(libs.retrofit)
