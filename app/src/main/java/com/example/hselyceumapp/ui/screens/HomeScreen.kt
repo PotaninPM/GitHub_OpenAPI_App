@@ -71,13 +71,9 @@ fun HomeScreen(
     val users by viewModel.users.collectAsState()
     val favoriteUsers by viewModelFav.favoriteUsers.collectAsState()
 
-    var clicked by rememberSaveable { mutableStateOf(false) }
-
-    LaunchedEffect(clicked) {
+    LaunchedEffect(Unit) {
         viewModelFav.fetchFavoriteUsers()
-        if (clicked) {
-            viewModel.fetchUsers()
-        }
+        viewModel.fetchUsers()
     }
 
     Column(
@@ -87,10 +83,6 @@ fun HomeScreen(
             .padding(top = 10.dp)
             .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top))
     ) {
-        Button(onClick = { clicked = true }) {
-            Text(stringResource(R.string.get_user))
-        }
-
         UserList(
             users = users,
             favoriteUsers = favoriteUsers,
