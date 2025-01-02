@@ -4,5 +4,5 @@
 - Работа с API: Retrofit
 - База данных: Room
 - Библиотеки: Coil (для работы с изображениями)
-- DI: Koin
+- DI (Dependency injection): Koin
 ---
