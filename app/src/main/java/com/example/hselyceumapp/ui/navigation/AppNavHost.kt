@@ -10,7 +10,10 @@ import androidx.navigation.compose.composable
 import com.example.hselyceumapp.ui.screens.FavScreen
 import com.example.hselyceumapp.ui.screens.HomeScreen
 import com.example.hselyceumapp.ui.screens.MainScreen
+import com.example.hselyceumapp.ui.screens.auth.SignInScreen
+import com.example.hselyceumapp.ui.screens.auth.SignUpScreen
 import com.example.hselyceumapp.ui.screens.UserScreen
+import com.example.hselyceumapp.ui.screens.WelcomeScreen
 
 @Composable
 fun AppNavHost(
@@ -19,7 +22,7 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.HomeScreen.route,
+        startDestination = Screen.WelcomeScreen.route,
         modifier = modifier,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None }
@@ -38,6 +41,18 @@ fun AppNavHost(
 
         composable(Screen.FavScreen.route) {
             FavScreen(navController)
+        }
+
+        composable(Screen.SignUpScreen.route) {
+            SignUpScreen(navController)
+        }
+
+        composable(Screen.SignInScreen.route) {
+            SignInScreen(navController)
+        }
+
+        composable(Screen.WelcomeScreen.route) {
+            WelcomeScreen(navController)
         }
     }
 }

@@ -1,24 +1,24 @@
 package com.example.hselyceumapp.data.mappers
 
 import com.example.hselyceumapp.data.room.entities.UserEntity
-import com.example.hselyceumapp.data.network.dto.UserDto
-import com.example.hselyceumapp.domain.model.User
+import com.example.hselyceumapp.data.network.dto.GitHubUserDto
+import com.example.hselyceumapp.domain.model.GitHubUser
 
-fun UserDto.toEntity() = UserEntity(
+fun GitHubUserDto.toEntity() = UserEntity(
     id = id,
     login = login,
     avatarUrl = avatarUrl,
     htmlUrl = htmlUrl
 )
 
-fun UserDto.toDomain() = User(
+fun GitHubUserDto.toDomain() = GitHubUser(
     id = id,
     login = login,
     avatarUrl = avatarUrl,
     htmlUrl = htmlUrl
 )
 
-fun User.toUserEntity(): UserEntity {
+fun GitHubUser.toUserEntity(): UserEntity {
     return UserEntity(
         id = this.id,
         login = this.login,
@@ -27,8 +27,8 @@ fun User.toUserEntity(): UserEntity {
     )
 }
 
-fun UserEntity.toUser(): User {
-    return User(
+fun UserEntity.toUser(): GitHubUser {
+    return GitHubUser(
         id = this.id,
         login = this.login,
         avatarUrl = this.avatarUrl,

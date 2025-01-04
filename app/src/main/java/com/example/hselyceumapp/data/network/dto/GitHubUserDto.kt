@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserDto(
+data class GitHubUserDto(
     val id: Int,
     val login: String,
     @SerializedName("avatar_url")

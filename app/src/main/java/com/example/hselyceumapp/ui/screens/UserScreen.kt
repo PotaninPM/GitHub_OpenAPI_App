@@ -41,6 +41,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.hselyceumapp.R
 import com.example.hselyceumapp.ui.components.Snowfall
 import com.example.hselyceumapp.ui.viewModels.UsersViewModel
@@ -60,6 +65,8 @@ fun UserScreen(
     val musicFiles = listOf(R.raw.song1, R.raw.songs2)
 
     Snowfall(isSnowfallActive)
+
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.santa))
 
     selectedUser?.let { user ->
         Column(
@@ -148,23 +155,10 @@ fun UserScreen(
                     Text(stringResource(R.string.new_year))
                 }
             } else {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Image(
-                        modifier = Modifier.size(110.dp),
-                        painter = painterResource(R.drawable.bauble),
-                        contentDescription = null
-                    )
-                    Image(
-                        modifier = Modifier.size(110.dp),
-                        painter = painterResource(R.drawable.christmas_tree),
-                        contentDescription = null
-                    )
-                }
+                LottieAnimation(
+                    iterations = LottieConstants.IterateForever,
+                    composition = composition
+                )
             }
         }
     } ?: run {
