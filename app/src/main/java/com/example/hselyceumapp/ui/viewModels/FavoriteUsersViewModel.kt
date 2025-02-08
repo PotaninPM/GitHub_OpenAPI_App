@@ -3,11 +3,9 @@ package com.example.hselyceumapp.ui.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hselyceumapp.data.room.dao.FavoriteDao
-import com.example.hselyceumapp.data.mappers.toUser
 import com.example.hselyceumapp.data.room.entities.FavoriteUserEntity
-import com.example.hselyceumapp.domain.model.User
+import com.example.hselyceumapp.domain.model.GitHubUser
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -17,7 +15,7 @@ class FavoriteUsersViewModel(
     private val _favoriteUsers = MutableStateFlow<List<FavoriteUserEntity>>(emptyList())
     val favoriteUsers = _favoriteUsers.asStateFlow()
 
-    fun toggleFavorite(user: User) {
+    fun toggleFavorite(user: GitHubUser) {
         viewModelScope.launch {
             val isFavorite = favoriteDao.isUserFavorite(user.id)
             if (isFavorite) {

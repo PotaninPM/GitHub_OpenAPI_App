@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.hselyceumapp.data.mappers.toUser
-import com.example.hselyceumapp.domain.model.User
+import com.example.hselyceumapp.domain.model.GitHubUser
 import com.example.hselyceumapp.ui.navigation.Screen
 import com.example.hselyceumapp.ui.viewModels.FavoriteUsersViewModel
 import com.example.hselyceumapp.ui.viewModels.UsersViewModel
@@ -42,7 +41,7 @@ fun FavScreen(
     ) {
         items(favoriteUsers) { user ->
             UserCard(
-                user = User(
+                user = GitHubUser(
                     id = user.id,
                     login = user.login,
                     avatarUrl = user.avatarUrl,

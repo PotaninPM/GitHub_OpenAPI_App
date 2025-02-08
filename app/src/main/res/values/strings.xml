@@ -14,4 +14,13 @@
     <string name="user_avatar">Аватар юзера</string>
     <string name="user_id">ID пользователя</string>
     <string name="new_year">С НОВЫМ ГОДОМ!</string>
+    <string name="password">Пароль</string>
+    <string name="email">Email</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="welcome">Добро пожаловать</string>
+    <string name="password_must_be_at_least_4_characters">Пароль должен содержать минимум 4 символа</string>
+    <string name="password_cannot_be_empty">Пароль не может быть пустым</string>
+    <string name="invalid_data">Данные не верны</string>
+    <string name="smth_went_wrong">Что-то пошло не так</string>
 </resources>

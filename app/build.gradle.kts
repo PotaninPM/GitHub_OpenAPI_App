@@ -43,8 +43,9 @@ android {
 }
 
 dependencies {
-    // lotti
-    implementation(libs.lottie)
+
+    //lottie
+    implementation(libs.lottie.compose)
 
     // Retrofit
     implementation(libs.retrofit)

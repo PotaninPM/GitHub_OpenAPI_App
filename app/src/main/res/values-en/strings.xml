@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HSE Lyceum App</string>
+    <string name="main">Main</string>
+    <string name="open">Open</string>
+    <string name="github_profile">GitHub Profile</string>
+    <string name="get_user">Get users</string>
+    <string name="id">ID</string>
+    <string name="login">Login</string>
+    <string name="github">GitHub</string>
+    <string name="favourite">Favorite</string>
+    <string name="none_chosen">No one was selected</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="toggle_favorites">Add to favorites</string>
+    <string name="user_avatar">User avatar</string>
+    <string name="user_id">User ID</string>
+    <string name="new_year">Happy New Year!</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="welcome">Welcome</string>
+    <string name="password_must_be_at_least_4_characters">Password must be at least 4 characters</string>
+    <string name="password_cannot_be_empty">Password cannot be empty</string>
+    <string name="invalid_data">Invalid data</string>
+    <string name="smth_went_wrong">Something went wrong</string>
+</resources>

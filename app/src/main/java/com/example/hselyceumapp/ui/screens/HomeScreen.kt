@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -31,6 +32,7 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,9 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,10 +56,12 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.hselyceumapp.R
 import com.example.hselyceumapp.data.room.entities.FavoriteUserEntity
-import com.example.hselyceumapp.domain.model.User
+import com.example.hselyceumapp.domain.model.GitHubUser
 import com.example.hselyceumapp.ui.navigation.Screen
 import com.example.hselyceumapp.ui.viewModels.FavoriteUsersViewModel
 import com.example.hselyceumapp.ui.viewModels.UsersViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -70,6 +72,7 @@ fun HomeScreen(
 ) {
     val users by viewModel.users.collectAsState()
     val favoriteUsers by viewModelFav.favoriteUsers.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModelFav.fetchFavoriteUsers()
@@ -86,10 +89,14 @@ fun HomeScreen(
         UserList(
             users = users,
             favoriteUsers = favoriteUsers,
+            isLoading = isLoading,
             onFavoriteToggle = { user -> viewModelFav.toggleFavorite(user) },
             onClick = { user ->
                 viewModel.selectUser(user)
                 navController.navigate(Screen.UserScreen.route)
+            },
+            onLoadMore = {
+                viewModel.loadMoreUsers()
             }
         )
     }
@@ -97,12 +104,19 @@ fun HomeScreen(
 
 @Composable
 fun UserList(
-    users: List<User>,
+    users: List<GitHubUser>,
     favoriteUsers: List<FavoriteUserEntity>,
-    onFavoriteToggle: (User) -> Unit,
-    onClick: (User) -> Unit
+    isLoading: Boolean,
+    onFavoriteToggle: (GitHubUser) -> Unit,
+    onClick: (GitHubUser) -> Unit,
+    onLoadMore: () -> Unit
 ) {
-    LazyColumn {
+    val listState = rememberLazyListState()
+
+    LazyColumn(
+        state = listState,
+        modifier = Modifier.fillMaxSize()
+    ) {
         items(users) { user ->
             val isFavorite = favoriteUsers.any { it.id == user.id }
             UserCard(
@@ -112,13 +126,36 @@ fun UserList(
                 onClick = { onClick(user) }
             )
         }
+
+        if (isLoading) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+            .filter { it != null && it >= users.lastIndex - 5 }
+            .distinctUntilChanged()
+            .collect {
+                onLoadMore()
+            }
     }
 }
 
 
+
 @Composable
 fun UserCard(
-    user: User,
+    user: GitHubUser,
     onClick: () -> Unit,
     isFavorite: Boolean,
     onFavoriteToggle: () -> Unit
