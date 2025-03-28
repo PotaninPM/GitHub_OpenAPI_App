@@ -17,7 +17,6 @@ import com.example.hselyceumapp.domain.state.AuthState
 import com.example.hselyceumapp.ui.navigation.AppNavHost
 import com.example.hselyceumapp.ui.navigation.Screen
 import com.example.hselyceumapp.ui.screens.MainScreen
-import com.example.hselyceumapp.ui.viewModels.AuthViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.context.GlobalContext.startKoin

@@ -42,6 +42,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,6 +60,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.hselyceumapp.R
 import com.example.hselyceumapp.data.room.entities.FavoriteUserEntity
 import com.example.hselyceumapp.domain.model.GitHubUser
+import com.example.hselyceumapp.ui.components.FullImageScreenDialog
 import com.example.hselyceumapp.ui.navigation.Screen
 import com.example.hselyceumapp.ui.viewModels.FavoriteUsersViewModel
 import com.example.hselyceumapp.ui.viewModels.UsersViewModel
@@ -74,9 +78,18 @@ fun HomeScreen(
     val favoriteUsers by viewModelFav.favoriteUsers.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
+    var userImageClicked by remember { mutableStateOf<String?>(null) }
+
     LaunchedEffect(Unit) {
         viewModelFav.fetchFavoriteUsers()
         viewModel.fetchUsers()
+    }
+
+    if (userImageClicked != null) {
+        FullImageScreenDialog(
+            imageUrl = userImageClicked!!,
+            onDismiss = { userImageClicked = null }
+        )
     }
 
     Column(
@@ -97,6 +110,9 @@ fun HomeScreen(
             },
             onLoadMore = {
                 viewModel.loadMoreUsers()
+            },
+            onImageClicked = { image ->
+                userImageClicked = image
             }
         )
     }
@@ -109,7 +125,8 @@ fun UserList(
     isLoading: Boolean,
     onFavoriteToggle: (GitHubUser) -> Unit,
     onClick: (GitHubUser) -> Unit,
-    onLoadMore: () -> Unit
+    onLoadMore: () -> Unit,
+    onImageClicked: (String) -> Unit
 ) {
     val listState = rememberLazyListState()
 
@@ -119,11 +136,15 @@ fun UserList(
     ) {
         items(users) { user ->
             val isFavorite = favoriteUsers.any { it.id == user.id }
+
             UserCard(
                 user = user,
                 isFavorite = isFavorite,
                 onFavoriteToggle = { onFavoriteToggle(user) },
-                onClick = { onClick(user) }
+                onClick = { onClick(user) },
+                onImageClick = { image ->
+                    onImageClicked(image)
+                }
             )
         }
 
@@ -158,7 +179,8 @@ fun UserCard(
     user: GitHubUser,
     onClick: () -> Unit,
     isFavorite: Boolean,
-    onFavoriteToggle: () -> Unit
+    onFavoriteToggle: () -> Unit,
+    onImageClick: (String) -> Unit
 ) {
     val context = LocalContext.current
 
@@ -230,6 +252,9 @@ fun UserCard(
                     .fillMaxWidth()
                     .height(150.dp)
                     .background(Color.Gray, shape = RoundedCornerShape(8.dp))
+                    .clickable {
+                        onImageClick(user.avatarUrl)
+                    }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
