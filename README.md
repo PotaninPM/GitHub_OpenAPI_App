@@ -26,3 +26,10 @@
 - Асинхронная работа с сетью через Retrofit
 - Обработка изображений через Coil
 - Навигация между экранами через Jetpack Navigation Compose
+
+<div style="display: flex; flex-wrap: wrap;">
+    <img src="screenshots/photo1.jpg" alt="drawing" style="width: 30%; height: auto; margin-bottom: 10px;"/>
+    <img src="screenshots/photo2.jpg" alt="drawing" style="width: 30%; height: auto; margin-bottom: 10px; margin-left: 10px"/>
+  <img src="screenshots/photo3.jpg" alt="drawing" style="width: 30%; height: auto; margin-bottom: 10px; margin-left: 10px"/>
+  <img src="screenshots/video.mp4" alt="drawing" style="width: 30%; height: auto; margin-bottom: 10px; margin-left: 10px"/>
+</div>
